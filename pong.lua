@@ -12,6 +12,7 @@ local buffer = false
 local points = { posX = 1, posY = 1, value = 0, color = colours.white }
 function points:draw()
     term.setCursorPos(self.posX, self.posY)
+    term.setBackgroundColor(colours.black)
     term.setTextColor(self.color)
     term.write(self.value)
 end
@@ -239,11 +240,13 @@ function open_menu(main, win)
 end
 
 function game()
-    player_move()
-    enemy_move()
-    move_ball()
-    move_ball()
-    os.sleep(0.05)
+    if pause == false then
+        player_move()
+        enemy_move()
+        move_ball()
+        move_ball()
+        os.sleep(0.5)
+    end
 end
 
 function exit()
