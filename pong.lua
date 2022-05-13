@@ -8,7 +8,6 @@ local class_lib = require("class")
 -- Variables
 local pause = false
 local buffer = false
-local exit = false
 -- Classes
 local points = { posX = 1, posY = 1, value = 0, color = colours.white }
 function points:draw()
@@ -24,15 +23,18 @@ function points:undraw()
 end
 
 function points:add()
+    self:undraw()
     self.value = self.value + 1
     if self.value >= 9 then
         self.color = colours.red
     end
+    self:draw()
 end
 
 function points:reset()
     self.value = 0
     self.color = colours.white
+    self:draw()
 end
 
 points = class_lib.class:new(points)
@@ -42,18 +44,23 @@ local enemy_points = points:new({ posX = 28, posY = 3 })
 -- Entitys
 local player = game_utils.add_player(2, 7, "player_1")
 function player:reset()
+    self:undraw()
     self.posX = 2
     self.posY = 7
+    self:draw()
 end
 
 local enemy = game_utils.add_enemy(50, 7, "enemy_1")
 function enemy:reset()
+    self:undraw()
     self.posX = 50
     self.posY = 7
+    self:draw()
 end
 
 local ball = game_utils.add_other(48, 9, "ball_1")
 function ball:reset()
+    self:undraw()
     self.posX = 48
     self.posY = 9
     self.motionX = -1
@@ -61,6 +68,7 @@ function ball:reset()
     if self.motionY == 2 then
         self.motionY = -1
     end
+    self:draw()
 end
 
 function ball:bounce()
@@ -76,9 +84,7 @@ function ball:goal()
         if enemy_points.value >= 9 then
             return end_game(false)
         else
-            enemy_points:undraw()
             enemy_points:add()
-            enemy_points:draw()
             os.sleep(0.5)
             self:reset()
             return false
@@ -87,9 +93,7 @@ function ball:goal()
         if player_points.value >= 9 then
             return end_game(true)
         else
-            player_points:undraw()
             player_points:add()
-            player_points:draw()
             os.sleep(0.5)
             self:reset()
             return false
@@ -127,7 +131,7 @@ game_utils.add_controller_key(main_menu_controll, "Select", keys.enter, function
         start_game()
     elseif main_menu.selected == table_utils.getIndex(main_menu.selection, do_exit) then
         main_menu_controll:stop()
-        exit = true
+        exit()
     end
 end)
 game_utils.add_controller_key(end_menu_controll, "Up", keys.up, function()
@@ -144,7 +148,7 @@ game_utils.add_controller_key(end_menu_controll, "Select", keys.enter, function(
         start_game()
     elseif end_menu.selected == table_utils.getIndex(end_menu.selection, do_end_exit) then
         end_menu_controll:stop()
-        exit = true
+        exit()
     end
 end)
 game_utils.add_controller_key(game_controll, "Up", keys.up, function()
@@ -192,14 +196,22 @@ enemy.render[1][4].color = colours.lightGrey
 ball.render[1][1].color = colours.grey
 -- Game Functions
 function start_game()
-
+    game_utils.change_background(game_back)
+    player:reset()
+    enemy:reset()
+    ball:reset()
+    player_points:reset()
+    enemy_points:reset()
+    game_controll:start(game)
 end
 
 function end_game(win)
-
+    game_controll:stop()
+    open_menu(false, win)
 end
 
-function open_menu(main)
+function open_menu(main, win)
+    win = win or false
     game_utils.change_background(menu_back)
     if main then
         game_utils.change_menu(main_menu, 21, 9)
@@ -208,14 +220,87 @@ function open_menu(main)
                 os.sleep(1)
             end)
         until main_menu_controll.finished
-        return exit
     else
         game_utils.change_menu(end_menu, 20, 9)
+        term.setCursorPos(20, 6)
+        term.setTextColor(colours.white)
+        term.setBackgroundColor(colours.black)
+        if win then
+            term.write("You Win!!!")
+        else
+            term.write("You Lose!!!")
+        end
         repeat
             end_menu_controll:start(function()
                 os.sleep(1)
             end)
         until end_menu_controll.finished
-        return exit
     end
+end
+
+function game()
+    player_move()
+    enemy_move()
+    move_ball()
+    move_ball()
+    os.sleep(0.05)
+end
+
+function exit()
+    os.shutdown()
+end
+
+function player_move()
+    if buffer == "U" then
+        player:undraw()
+        player:moveUp()
+        player:draw()
+        buffer = false
+    elseif buffer == "D" then
+        player:undraw()
+        player:moveDown()
+        player:draw()
+        buffer = false
+    end
+end
+
+function enemy_move()
+    local lastX, lastY = enemy:getLastPosition()
+    local sizeX, sizeY = enemy:getSize()
+    if (enemy.posY > ball.posY) and (enemy.posY > 2) then
+        enemy:undraw()
+        enemy:moveUp()
+        enemy:draw()
+    elseif (lastY < ball.posY) and (enemy.posY < (19 - sizeY)) then
+        enemy:undraw()
+        enemy:moveDown()
+        enemy:draw()
+    end
+end
+
+function move_ball(first)
+    first = first or true
+    if first then
+        ball:undraw()
+    end
+    ball.posX = ball.posX + ball.motionX
+    ball.posY = ball.posY + ball.motionY
+    if first then
+        ball:draw()
+        check_ball()
+    end
+end
+
+function check_ball()
+    local x, y = ball.posX, ball.posY
+    if x == 1 or x == 51 then return ball:goal() end
+    move_ball(false)
+    if ball.posY == 1 or ball.posY == 19 then
+        ball:bounce()
+    end
+    if ball:collision(player) or ball:collision(enemy) then
+        ball:bounce_back()
+    end
+    ball.posX = x
+    ball.posY = y
 end
