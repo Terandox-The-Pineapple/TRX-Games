@@ -192,6 +192,7 @@ enemy.render[1][4].color = colours.lightGrey
 ball.render[1][1].color = colours.grey
 -- Game Functions
 function start_game()
+    shell.run("clear")
     print("game started")
 end
 
@@ -221,4 +222,5 @@ function open_menu(main)
 end
 
 local para = open_menu(true)
+if exit then shell.run("clear") end
 print(para and 'true' or 'false')
