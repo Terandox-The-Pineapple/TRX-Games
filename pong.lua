@@ -122,10 +122,10 @@ game_utils.add_controller_key(main_menu_controll, "Down", keys.down, function()
     main_menu:draw(22, 9)
 end)
 game_utils.add_controller_key(main_menu_controll, "Select", keys.enter, function()
-    if main_menu.selected == table_utils.getIndex(do_start) then
+    if main_menu.selected == table_utils.getIndex(main_menu, do_start) then
         main_menu_controll:stop()
         start_game()
-    elseif main_menu.selected == table_utils.getIndex(do_exit) then
+    elseif main_menu.selected == table_utils.getIndex(main_menu, do_exit) then
         main_menu_controll:stop()
         exit = true
     end
@@ -139,10 +139,10 @@ game_utils.add_controller_key(end_menu_controll, "Down", keys.down, function()
     end_menu:draw(22, 9)
 end)
 game_utils.add_controller_key(end_menu_controll, "Select", keys.enter, function()
-    if end_menu.selected == table_utils.getIndex(do_restart) then
+    if end_menu.selected == table_utils.getIndex(end_menu, do_restart) then
         end_menu_controll:stop()
         start_game()
-    elseif end_menu.selected == table_utils.getIndex(do_end_exit) then
+    elseif end_menu.selected == table_utils.getIndex(end_menu, do_end_exit) then
         end_menu_controll:stop()
         exit = true
     end
