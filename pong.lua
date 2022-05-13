@@ -8,6 +8,19 @@ local class_lib = require("class")
 -- Variables
 local exit = false
 local pause = false
+local set_menu = false
+-- Classes
+local points = { posX = 1, posY = 1, value = 0, color = colours.white }
+function points:draw()
+    term.setCursorPos(self.posX, self.posY)
+    term.setTextColor(self.color)
+    term.write(self.value)
+end
+
+function points:undraw()
+    term.setCursorPos(self.posX, self.posY)
+end
+
 -- Entitys
 local player = game_utils.add_player("player_1")
 local enemy = game_utils.add_enemy("enemy_1")
