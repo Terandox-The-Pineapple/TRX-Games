@@ -161,7 +161,7 @@ end)
 -- Render Inits
 for x = 1, 51, 1 do
     for y = 1, 19, 1 do
-        if x == 1 or x == 51 or y == 1 or y == 19 or ((x >= 20 and x <= 26) and (y >= 8 and y <= 12)) then
+        if x == 1 or x == 51 or y == 1 or y == 19 or ((x >= 20 and x <= 31) and (y >= 8 and y <= 12)) then
             menu_back.render[x][y].color = colours.white
         else
             menu_back.render[x][y].color = colours.black
@@ -201,7 +201,7 @@ function open_menu(main)
         game_utils.change_menu(main_menu, 22, 9)
         repeat
             main_menu_controll:start(function()
-                return true
+                os.sleep(1)
             end)
         until main_menu_controll.finished
         return exit
@@ -209,7 +209,7 @@ function open_menu(main)
         game_utils.change_menu(end_menu, 22, 9)
         repeat
             end_menu_controll:start(function()
-                return true
+                os.sleep(1)
             end)
         until end_menu_controll.finished
         return exit
