@@ -304,3 +304,5 @@ function check_ball()
     ball.posX = x
     ball.posY = y
 end
+
+open_menu(true)
