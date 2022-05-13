@@ -115,9 +115,11 @@ local game_controll = game_utils.add_controller("game")
 -- controller keys
 game_utils.add_controller_key(main_menu_controll, "Up", keys.up, function()
     main_menu:up()
+    main_menu:draw()
 end)
 game_utils.add_controller_key(main_menu_controll, "Down", keys.down, function()
     main_menu:down()
+    main_menu:draw()
 end)
 game_utils.add_controller_key(main_menu_controll, "Select", keys.enter, function()
     if main_menu.selected == table_utils.getIndex(do_start) then
@@ -130,9 +132,11 @@ game_utils.add_controller_key(main_menu_controll, "Select", keys.enter, function
 end)
 game_utils.add_controller_key(end_menu_controll, "Up", keys.up, function()
     end_menu:up()
+    end_menu:draw()
 end)
 game_utils.add_controller_key(end_menu_controll, "Down", keys.down, function()
     end_menu:down()
+    end_menu:draw()
 end)
 game_utils.add_controller_key(end_menu_controll, "Select", keys.enter, function()
     if end_menu.selected == table_utils.getIndex(do_restart) then
