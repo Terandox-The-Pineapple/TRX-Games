@@ -115,11 +115,11 @@ local game_controll = game_utils.add_controller("game")
 -- controller keys
 game_utils.add_controller_key(main_menu_controll, "Up", keys.up, function()
     main_menu:up()
-    main_menu:draw(22, 9)
+    main_menu:draw(21, 9)
 end)
 game_utils.add_controller_key(main_menu_controll, "Down", keys.down, function()
     main_menu:down()
-    main_menu:draw(22, 9)
+    main_menu:draw(21, 9)
 end)
 game_utils.add_controller_key(main_menu_controll, "Select", keys.enter, function()
     if main_menu.selected == table_utils.getIndex(main_menu.selection, do_start) then
@@ -132,11 +132,11 @@ game_utils.add_controller_key(main_menu_controll, "Select", keys.enter, function
 end)
 game_utils.add_controller_key(end_menu_controll, "Up", keys.up, function()
     end_menu:up()
-    end_menu:draw(22, 9)
+    end_menu:draw(21, 9)
 end)
 game_utils.add_controller_key(end_menu_controll, "Down", keys.down, function()
     end_menu:down()
-    end_menu:draw(22, 9)
+    end_menu:draw(21, 9)
 end)
 game_utils.add_controller_key(end_menu_controll, "Select", keys.enter, function()
     if end_menu.selected == table_utils.getIndex(end_menu.selection, do_restart) then
@@ -203,7 +203,7 @@ end
 function open_menu(main)
     game_utils.change_background(menu_back)
     if main then
-        game_utils.change_menu(main_menu, 22, 9)
+        game_utils.change_menu(main_menu, 21, 9)
         repeat
             main_menu_controll:start(function()
                 os.sleep(1)
@@ -211,7 +211,7 @@ function open_menu(main)
         until main_menu_controll.finished
         return exit
     else
-        game_utils.change_menu(end_menu, 22, 9)
+        game_utils.change_menu(end_menu, 21, 9)
         repeat
             end_menu_controll:start(function()
                 os.sleep(1)
