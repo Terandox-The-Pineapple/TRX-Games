@@ -200,13 +200,17 @@ function open_menu(main)
     if main then
         game_utils.change_menu(main_menu, 22, 9)
         repeat
-            main_menu_controll:start()
+            main_menu_controll:start(function()
+                return true
+            end)
         until main_menu_controll.finished
         return exit
     else
         game_utils.change_menu(end_menu, 22, 9)
         repeat
-            end_menu_controll:start()
+            end_menu_controll:start(function()
+                return true
+            end)
         until end_menu_controll.finished
         return exit
     end
