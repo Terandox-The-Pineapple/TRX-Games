@@ -240,12 +240,14 @@ function open_menu(main, win)
 end
 
 function game()
-    if pause == false then
-        player_move()
-        enemy_move()
-        move_ball()
-        move_ball()
-        os.sleep(0.5)
+    while game_controll.finished == false do
+        if pause == false then
+            player_move()
+            enemy_move()
+            move_ball()
+            move_ball()
+            os.sleep(1)
+        end
     end
 end
 
@@ -286,8 +288,16 @@ function move_ball(first)
     if first then
         ball:undraw()
     end
-    ball.posX = ball.posX + ball.motionX
-    ball.posY = ball.posY + ball.motionY
+    if ball.motionX == 1 then
+        ball:moveRight()
+    elseif ball.motionX == -1 then
+        ball:moveLeft()
+    end
+    if ball.motionY == 1 then
+        ball:moveDown()
+    elseif ball.motionY == -1 then
+        ball:moveUp()
+    end
     if first then
         ball:draw()
         check_ball()
