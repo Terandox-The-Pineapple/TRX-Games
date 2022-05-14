@@ -88,7 +88,6 @@ function ball:goal()
             enemy_points:add()
             os.sleep(0.5)
             self:reset()
-            return false
         end
     elseif self.posX == 51 then
         if player_points.value >= 9 then
@@ -97,7 +96,6 @@ function ball:goal()
             player_points:add()
             os.sleep(0.5)
             self:reset()
-            return false
         end
     end
 end
