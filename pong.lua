@@ -281,11 +281,8 @@ function enemy_move()
     end
 end
 
-function move_ball(first)
-    first = first or true
-    if first then
-        ball:undraw()
-    end
+function move_ball()
+    ball:undraw()
     if ball.motionX == 1 then
         ball:moveRight()
     elseif ball.motionX == -1 then
@@ -296,24 +293,29 @@ function move_ball(first)
     elseif ball.motionY == -1 then
         ball:moveUp()
     end
-    if first then
-        ball:draw()
-        check_ball()
-    end
+    ball:draw()
+    check_ball()
 end
 
 function check_ball()
-    local x, y = ball.posX, ball.posY
-    if x == 1 or x == 51 then return ball:goal() end
-    move_ball(false)
-    if ball.posY == 1 or ball.posY == 19 then
-        ball:bounce()
+    local nextX, nextY = ball.posX, ball.posY
+    if nextX == 1 or nextX == 51 then return ball:goal() end
+    if ball.motionX == 1 then
+        nextX = nextX + 1
+    elseif ball.motionX == -1 then
+        nextX = nextX - 1
     end
-    if ball:collision(player) or ball:collision(enemy) then
+    if ball.motionY == 1 then
+        nextY = nextY + 1
+    elseif ball.motionY == -1 then
+        nextY = nextY - 1
+    end
+    if nextY == 1 or nextY == 19 then ball:bounce() end
+    local plx, ply = player:getLastPosition()
+    local elx, ely = enemy:getLastPosition()
+    if (nextX == player.posX and nextY <= ply and nextY >= player.posY) or (nextX == enemy.posX and nextY <= ely and nextY >= enemy.posY) then
         ball:bounce_back()
     end
-    ball.posX = x
-    ball.posY = y
 end
 
 open_menu(true)
